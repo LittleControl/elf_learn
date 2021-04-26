@@ -5,16 +5,17 @@ import lief
 window = Tk()
 window.title("ELF")
 window.geometry("500x500")
-lbl = Label(window, text="请输入要分析的文件路径", font=("Roboto", 40), bd=4)
-lbl.grid(column=70, row=20)
-txt = Entry(window, width=10, font=("Roboto", 20), bd=4)
-txt.grid(column=70, row=30)
-stxt = scrolledtext.ScrolledText(window, width=70, height=30, font=("Roboto", 20))
-stxt.grid(column=70, row=700)
-def header():
-  # print(path)
+lbl = Label(window, text="请输入要分析的文件路径", font=("Roboto", 30))
+lbl.grid(column=0, row=20)
+txt = Entry(window, width=20, font=("Roboto", 20))
+txt.grid(column=0, row=30)
+stxt = scrolledtext.ScrolledText(window, width=110, height=30, font=("Roboto", 20))
+stxt.grid(column=0, row=70)
+def e_header():
+  # print(path)方
   binary = lief.ELF.parse(txt.get())
   header = binary.header
+  stxt.delete(1.0, END)
   stxt.insert(INSERT, "魔数: %s\n" % (header.identity))
   stxt.insert(INSERT, "目标类型: %s\n" % (header.identity_class))
   stxt.insert(INSERT, "数据编码方式: %s\n" % (header.identity_data))
@@ -44,6 +45,18 @@ def header():
   stxt.insert(INSERT, "节头偏移量: %s\n" % (header.section_header_offset))
   stxt.insert(INSERT, "节头表索引: %s\n" % (header.section_name_table_idx))
 
-btn = Button(window, text="Click Me", font=("Roboto", 25), bd=4, command=header)
-btn.grid(column=70, row=40)
+def e_segments():
+  binary = lief.ELF.parse(txt.get())
+  segments = binary.segments
+  stxt.delete(1.0, END)
+  stxt.insert(INSERT, "%-60s%-8s%-8s%-8s%-8s%-8s%-8s%-8s\n" % ("类型", "段偏移", "虚拟地址", "物理地址","文件大小","内存大小","标志", "对齐"))
+  for segment in segments:
+    stxt.insert(INSERT, "%-60s%-8s%-8s%-8s%-8s%-8s%-8s%-8s\n" % (segment.type, segment.file_offset, segment.virtual_address, segment.physical_address, segment.physical_size, segment.virtual_size, segment.flags, segment.alignment))
+
+
+btn_h = Button(window, text="Header", font=("Roboto", 20), command=e_header)
+btn_h.grid(column=0, row=40)
+btn_s = Button(window, text="Segments", font=("Roboto", 20), command=e_segments)
+btn_s.grid(column=5, row=40)
+
 window.mainloop()
