@@ -38,4 +38,28 @@ segment = segments[0]
 # print(type(segment.alignment))
 # print(segment.flags)
 # print(type(segment.flags))
-print("%4s\n" % (segment.type))
+# print("%4s\n" % (segment.type))
+sections = binary.sections
+# print(sections)
+# section.name,
+# section.type,
+# section.flags,
+# section.virtual_address,
+# section.file_offset,
+# section.size,
+# section.link,
+# section.information,
+# section.alignment,
+# section.entry_size
+section = sections[1]
+print(section)
+print(section.name, type(section.name))
+print(section.type, type(section.type))
+print(section.flags, type(section.flags))
+print(section.virtual_address, type(section.virtual_address))
+print(section.file_offset, type(section.file_offset))
+print(section.size, type(section.size))
+print(section.link, type(section.link))
+print(section.information, type(section.information))
+print(section.alignment, type(section.alignment))
+print(section.entry_size, type(section.entry_size))
