@@ -9,7 +9,8 @@ lbl = Label(window, text="请输入要分析的文件路径", font=("Roboto", 30
 lbl.grid(column=0, row=0, columnspan=3)
 txt = Entry(window, font=("Roboto", 20))
 txt.grid(column=0, row=1, columnspan=3)
-stxt = scrolledtext.ScrolledText(window, font=("Mono", 15), width=100)
+stxt = scrolledtext.ScrolledText(
+    window, font=("NotoSansMono", 15), width=120)
 stxt.grid(column=0, row=3, columnspan=4)
 
 
@@ -52,11 +53,10 @@ def e_segments():
     binary = lief.ELF.parse(txt.get())
     segments = binary.segments
     stxt.delete(1.0, END)
-    stxt.insert(INSERT, "%-28s%-3s%-4s%-4s%-4s%-4s%-6s%-6s\n" %
+    stxt.insert(INSERT, "%-26s%-6s%-6s%-6s%-7s%-7s%-16s%-6s\n" %
                 ("类型", "段偏移", "虚拟地址", "物理地址", "文件大小", "内存大小", "标志", "对齐"))
     for segment in segments:
-        print(segment.alignment)
-        stxt.insert(INSERT, "%-30s%-6s%-8s%-8s%-8s%-8s%-8s%-8d\n" %
+        stxt.insert(INSERT, "%-28s%-8s%-8s%-9s%-9s%-8s%-20s%-8d\n" %
                     (segment.type,
                      segment.file_offset,
                      segment.virtual_address,
@@ -71,10 +71,10 @@ def e_sections():
     binary = lief.ELF.parse(txt.get())
     sections = binary.sections
     stxt.delete(1.0, END)
-    stxt.insert(INSERT, "%-14s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s\n" %
+    stxt.insert(INSERT, "%-19s%-24s%-4s%-6s%-6s%-5s%-4s%-6s%-4s%-6s\n" %
                 ("节名", "节类", "标识", "虚拟地址", "文件偏移", "字节数", "链接", "额外信息", "对齐", "入口大小"))
     for section in sections:
-        stxt.insert(INSERT, "%-16s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s%-10s\n" %
+        stxt.insert(INSERT, "%-20s%-27s%-5s%-8s%-9s%-8s%-7s%-6s%-6s%-8s\n" %
                     (section.name,
                      section.type,
                      section.flags,
@@ -94,6 +94,7 @@ btn_h = Button(window, text="Header", font=(
 btn_h.grid(column=0, row=2)
 btn_s = Button(window, text="Segments", font=(
     "Roboto", 20), command=e_segments)
+
 btn_s.grid(column=1, row=2)
 btn_s = Button(window, text="Sections", font=(
     "Roboto", 20), command=e_sections)
