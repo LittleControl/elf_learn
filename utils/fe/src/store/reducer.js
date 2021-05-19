@@ -6,6 +6,7 @@ const defaultState = {
   header: 'header',
   segments: 'segments',
   sections: 'sections',
+  sh_strtab: [],
 }
 
 export default (state = defaultState, action) => {
