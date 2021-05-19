@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import { Descriptions } from 'antd'
+import { Descriptions, Card, Divider, Row, Col } from 'antd'
 import store from './store'
 
 
@@ -46,6 +46,41 @@ const Header = () => {
         <Descriptions.Item label="文件在程序头表中的偏移">{header.program_header_offset}</Descriptions.Item>
         <Descriptions.Item label=""></Descriptions.Item>
       </Descriptions>
+      <Divider orientation="left">数据结构定义</Divider>
+      <Row>
+        <Col span={12}>
+          <Card>
+            <p>
+              <code>{'typedef struct'}</code><br />
+              <code>{'{'}</code><br />
+              <code>&nbsp;&nbsp;unsigned char e_ident[EI_NIDENT];</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_type;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_machine;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Addr    e_entry;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Off e_phoff;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Off e_shoff;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Word    e_flags;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_ehsize;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_phentsize;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_phnum;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_shentsize;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_shnum;</code><br />
+              <code>&nbsp;&nbsp;Elf64_Half    e_shstrndx;</code><br />
+              <code>{'} Elf64_Ehdr;'}</code>
+            </p>
+
+          </Card>
+        </Col>
+        <Col span={12}>
+          <Card>
+            <p>Card content</p>
+            <p>Card content</p>
+            <p>Card content</p>
+          </Card>
+        </Col>
+      </Row>
+
+
     </>
   )
 }
