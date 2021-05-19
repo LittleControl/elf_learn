@@ -11,19 +11,19 @@ const { Title } = Typography
 const { Search } = Input
 
 const tabList = [
-  { key: 'header', tab: 'header', },
-  { key: 'segments', tab: 'segments', },
-  { key: 'sections', tab: 'sections', },
+  { key: 'Header', tab: 'Header', },
+  { key: 'Segments', tab: 'Segments', },
+  { key: 'Sections', tab: 'Sections', },
 ]
 
 const contentList = {
-  header: <Header />,
-  segments: <Segments />,
-  sections: <Sections />,
+  Header: <Header />,
+  Segments: <Segments />,
+  Sections: <Sections />,
 }
 
 const App = () => {
-  const [key, setKey] = useState('header')
+  const [key, setKey] = useState('Header')
   const [file, setFile] = useState(store.getState().file)
   const onTabChange = (key) => {
     setKey(key)
