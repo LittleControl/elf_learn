@@ -39,10 +39,11 @@ const App = () => {
   }
   return (
     <>
+      <br />
       <Row>
         <Col span={8}></Col>
         <Col span={8}>
-          <Title>ELF文件分析工具</Title>
+          <Title style={{ textAlign: 'center' }}>ELF文件分析工具</Title>
           <Search
             placeholder="要分析的文件路径"
             allowClear
