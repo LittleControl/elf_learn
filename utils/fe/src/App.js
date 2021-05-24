@@ -4,7 +4,7 @@ import store from './store'
 import Header from './Header'
 import Segments from './Segments'
 import Sections from './Sections'
-import { postFileName } from './store/actionCreators'
+import { postFileName, getSections, getSegments } from './store/actionCreators'
 import './App.css'
 
 const { Title } = Typography
@@ -26,7 +26,31 @@ const App = () => {
   const [key, setKey] = useState('Header')
   const [file, setFile] = useState(store.getState().file)
   const onTabChange = (key) => {
-    setKey(key)
+    if (key === 'Header') {
+      setKey(key)
+    }
+    if (key === 'Segments') {
+      if (store.getState().segments[0]) {
+        setKey(key)
+      } else {
+        const action = getSegments()
+        store.dispatch(action)
+          .then(() => {
+            setKey(key)
+          })
+      }
+    }
+    if (key === 'Sections') {
+      if (store.getState().sections[0]) {
+        setKey(key)
+      } else {
+        const action = getSections()
+        store.dispatch(action)
+          .then(() => {
+            setKey(key)
+          })
+      }
+    }
   }
   const onSearch = value => {
     if (value) {
