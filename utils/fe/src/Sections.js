@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Collapse } from 'antd'
+import { Table, Collapse, Button, Space, Modal } from 'antd'
 import store from './store'
+import { getRelocations, getSymbols } from './store/actionCreators'
 
 const { Panel } = Collapse
 
 const Sections = () => {
   const [sections, setSections] = useState(store.getState().sections)
   const [redSpan, setRedSpan] = useState(null)
+  const e_type = store.getState().header.type
   useEffect(() => {
     setSections(store.getState().sections)
   }, [])
@@ -24,10 +26,6 @@ const Sections = () => {
       temp = []
     }
   }
-  console.log(sh_strtab)
-  console.log(strtab_index)
-  console.log(strtab)
-
   const hlStrtab = (e) => {
     const name_idx = e.target.innerHTML
     const left = name_idx.indexOf('(')
@@ -40,7 +38,17 @@ const Sections = () => {
     setRedSpan(item)
     item.style.color = 'red'
   }
-
+  const [isSymbolVisible, setIsSymbolVisible] = useState(false)
+  const handleGetSymbols = () => {
+    const action = getSymbols()
+    store.dispatch(action)
+      .then(() => {
+        setIsSymbolVisible(true)
+      })
+  }
+  const handleOk = () => {
+    setIsSymbolVisible(false)
+  }
   const columns = [
     {
       title: 'No.',
@@ -101,6 +109,36 @@ const Sections = () => {
   ]
   return (
     <>
+      <Modal title="Symbols" visible={isSymbolVisible} onOk={handleOk} onCancel={handleOk}>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+        <p>Some contents...</p>
+      </Modal>
+      <Space>
+        <Button type="primary" onClick={handleGetSymbols}>Symbols</Button>
+        {
+          e_type === 'E_TYPE.DYNAMIC'
+            ?
+            <Space>
+              <Button type="primary">.dynsym</Button>
+              <Button type="primary">.dynstr</Button>
+              <Button type="primary">.dynamic</Button>
+            </Space>
+            : e_type === 'E_TYPE.EXECUTABLE'
+              ?
+              <Space>
+                <Button type="primary">.got</Button>
+                <Button type="primary">.plt</Button>
+              </Space>
+              :
+              <Space>
+                <Button type="primary">.text</Button>
+                <Button type="primary">.data</Button>
+                <Button type="primary">.rodata</Button>
+              </Space>
+        }
+      </Space>
+      <br /><br />
       <Table
         columns={columns}
         dataSource={sections}
