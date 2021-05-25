@@ -1,3 +1,4 @@
+from typing import BinaryIO
 import lief
 from flask import Flask
 from flask import request
@@ -8,7 +9,7 @@ import copy
 app = Flask(__name__)
 CORS(app, resources={r"/*": {"origins": "*"}})
 
-path = ''
+path = '/usr/bin/ls'
 
 
 @app.route("/")
@@ -41,22 +42,6 @@ def getSections():
     global path
     res = {}
     res['sections'] = e_sections(path)
-    return res
-
-
-@app.route('/symbols')
-def getSymbols():
-    global path
-    res = {}
-    res['symbols'] = e_symbols(path)
-    return res
-
-
-@app.route('/relocations')
-def getRelocations():
-    global path
-    res = {}
-    res['relocations'] = e_relocations(path)
     return res
 
 
@@ -140,6 +125,22 @@ def e_sections(path):
     return res
 
 
+@app.route('/symbols')
+def getSymbols():
+    global path
+    res = {}
+    res['symbols'] = e_symbols(path)
+    return res
+
+
+@app.route('/relocations')
+def getRelocations():
+    global path
+    res = {}
+    res['relocations'] = e_relocations(path)
+    return res
+
+
 def e_symbols(path):
     res = []
     binary = lief.parse(path)
@@ -181,43 +182,205 @@ def e_relocations(path):
 
 
 # rel
+@app.route('/text')
+def getText():
+    global path
+    res = {}
+    res['text'] = e_text(path)
+    return res
+
+
+@app.route('/data')
+def getData():
+    global path
+    res = {}
+    res['e_data'] = e_data(path)
+    return res
+
+
+@app.route('/rodata')
+def getRodata():
+    global path
+    res = {}
+    res['rodata'] = e_rodata(path)
+    return res
+
+
 def e_text(path):
-    res = []
+    res = {}
+    binary = lief.parse(path)
+    text = binary.get_section('.text')
+    res['flags'] = str(text.flags)
+    res['flags_list'] = str(text.flags_list)
+    res['content'] = text.content
+    content_hex = ''
+    content_str = ''
+    for item in text.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
 
 
 def e_data(path):
-    res = []
+    res = {}
+    binary = lief.parse(path)
+    data = binary.get_section('.data')
+    res['flags'] = str(data.flags)
+    res['flags_list'] = str(data.flags_list)
+    res['content'] = data.content
+    content_hex = ''
+    content_str = ''
+    for item in data.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
 
 
 def e_rodata(path):
-    res = []
+    res = {}
+    binary = lief.parse(path)
+    rodata = binary.get_section('.rodata')
+    res['flags'] = str(rodata.flags)
+    res['flags_list'] = str(rodata.flags_list)
+    res['content'] = rodata.content
+    content_hex = ''
+    content_str = ''
+    for item in rodata.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
+    print(res['content_str'])
     return res
 
 
 # dynamic
+@app.route('/dynamic')
+def getDynamic():
+    global path
+    res = {}
+    res['dynamic'] = e_dynamic(path)
+    return res
+
+
+@app.route('/dynstr')
+def getDynstr():
+    global path
+    res = {}
+    res['dynstr'] = e_dynstr(path)
+    return res
+
+
+@app.route('/dynsym')
+def getDynsym():
+    global path
+    res = {}
+    res['dynsym'] = e_dynsym(path)
+    return res
+
+
 def e_dynamic(path):
-    res = []
+    res = {}
+    binary = lief.parse(path)
+    dynamic = binary.get_section('.dynamic')
+    res['flags'] = str(dynamic.flags)
+    res['flags_list'] = str(dynamic.flags_list)
+    res['content'] = dynamic.content
+    content_hex = ''
+    content_str = ''
+    for item in dynamic.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
 
 
 def e_dynstr(path):
-    res = []
+    res = {}
+    binary = lief.parse(path)
+    dynstr = binary.get_section('.dynstr')
+    res['flags'] = str(dynstr.flags)
+    res['flags_list'] = str(dynstr.flags_list)
+    res['content'] = dynstr.content
+    content_hex = ''
+    content_str = ''
+    for item in dynstr.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
 
 
 def e_dynsym(path):
-    res = []
+    res = {}
+    binary = lief.parse(path)
+    print(binary)
+    dynsym = binary.get_section('.dynsym')
+    res['flags'] = str(dynsym.flags)
+    res['flags_list'] = str(dynsym.flags_list)
+    res['content'] = dynsym.content
+    content_hex = ''
+    content_str = ''
+    for item in dynsym.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
 
 
-# exe
+# exec
+@app.route('/got')
+def getGot():
+    global path
+    res = {}
+    res['got'] = e_got(path)
+    return res
+
+
+@app.route('/plt')
+def getPlt():
+    global path
+    res = {}
+    res['plt'] = e_plt(path)
+    return res
+
+
 def e_got(path):
     res = {}
+    binary = lief.parse(path)
+    got = binary.get_section('.got')
+    res['flags'] = str(got.flags)
+    res['flags_list'] = str(got.flags_list)
+    res['content'] = got.content
+    content_hex = ''
+    content_str = ''
+    for item in got.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
 
 
 def e_plt(path):
     res = {}
+    binary = lief.parse(path)
+    plt = binary.get_section('.plt')
+    res['flags'] = str(plt.flags)
+    res['flags_list'] = str(plt.flags_list)
+    res['content'] = plt.content
+    content_hex = ''
+    content_str = ''
+    for item in plt.content:
+        content_str += chr(item)
+        content_hex += hex(item)
+    res['content_str'] = content_str
+    res['content_hex'] = content_hex
     return res
