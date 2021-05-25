@@ -1,17 +1,65 @@
 import React, { useState, useEffect } from 'react'
-import { Table, Collapse, Button, Space, Modal } from 'antd'
+import { Table, Collapse, Button, Space, Modal, Descriptions } from 'antd'
 import store from './store'
-import { getRelocations, getSymbols } from './store/actionCreators'
+import {
+  getSymbols,
+  getText,
+  getData,
+  getRodata,
+  getDynamic,
+  getDynstr,
+  getDynsym,
+  getGot,
+  getPlt,
+} from './store/actionCreators'
 
 const { Panel } = Collapse
 
 const Sections = () => {
   const [sections, setSections] = useState(store.getState().sections)
   const [redSpan, setRedSpan] = useState(null)
+  const [symbols, setSymbols] = useState(store.getState().symbols)
+  const [text, setText] = useState(store.getState().text)
+  const [e_data, setEData] = useState(store.getState().e_data)
+  const [rodata, setRodata] = useState(store.getState().rodata)
+  const [dynamic, setDynamic] = useState(store.getState().dynamic)
+  const [dynstr, setDynstr] = useState(store.getState().dynstr)
+  const [dynsym, setDynsym] = useState(store.getState().dynsym)
+  const [got, setGot] = useState(store.getState().got)
+  const [plt, setPlt] = useState(store.getState().plt)
+  const [isSymbolVisible, setIsSymbolVisible] = useState(false)
+  const [isTextVisible, setIsTextVisible] = useState(false)
+  const [isRodataVisible, setIsRodataVisible] = useState(false)
+  const [isDataVisible, setIsDataVisible] = useState(false)
+  const [isDynamicVisible, setIsDynamicVisible] = useState(false)
+  const [isDynstrVisible, setIsDynstrVisible] = useState(false)
+  const [isDynsymVisible, setIsDynsymVisible] = useState(false)
+  const [isGotVisible, setIsGotVisible] = useState(false)
+  const [isPltVisible, setIsPltVisible] = useState(false)
   const e_type = store.getState().header.type
   useEffect(() => {
     setSections(store.getState().sections)
-  }, [])
+    setSymbols(store.getState().symbols)
+    setText(store.getState().text)
+    setEData(store.getState().data)
+    setRodata(store.getState().rodata)
+    setDynamic(store.getState().dynamic)
+    setDynstr(store.getState().dynstr)
+    setDynsym(store.getState().dynsym)
+    setPlt(store.getState().plt)
+    setGot(store.getState().got)
+
+  }, [
+    isSymbolVisible,
+    isTextVisible,
+    isDataVisible,
+    isRodataVisible,
+    isDynamicVisible,
+    isDynstrVisible,
+    isDynsymVisible,
+    isPltVisible,
+    isGotVisible,
+  ])
   const sh_strtab = store.getState().sh_strtab
   const strtab_index = [0, 1]
   const strtab = []
@@ -38,7 +86,7 @@ const Sections = () => {
     setRedSpan(item)
     item.style.color = 'red'
   }
-  const [isSymbolVisible, setIsSymbolVisible] = useState(false)
+
   const handleGetSymbols = () => {
     const action = getSymbols()
     store.dispatch(action)
@@ -46,8 +94,72 @@ const Sections = () => {
         setIsSymbolVisible(true)
       })
   }
+  const handleGetText = () => {
+    const action = getText()
+    store.dispatch(action)
+      .then(() => {
+        setIsTextVisible(true)
+      })
+  }
+  const handleGetData = () => {
+    const action = getData()
+    store.dispatch(action)
+      .then(() => {
+        setIsDataVisible(true)
+      })
+  }
+  const handleGetRodata = () => {
+    const action = getRodata()
+    store.dispatch(action)
+      .then(() => {
+        setIsRodataVisible(true)
+      })
+  }
+  const handleGetDynamic = () => {
+    const action = getDynamic()
+    store.dispatch(action)
+      .then(() => {
+        setIsDynamicVisible(true)
+      })
+  }
+  const handleGetDynstr = () => {
+    const action = getDynstr()
+    store.dispatch(action)
+      .then(() => {
+        setIsDynstrVisible(true)
+      })
+  }
+  const handleGetDynsym = () => {
+    const action = getDynsym()
+    store.dispatch(action)
+      .then(() => {
+        setIsDynsymVisible(true)
+      })
+  }
+  const handleGetPlt = () => {
+    const action = getPlt()
+    store.dispatch(action)
+      .then(() => {
+        setIsPltVisible(true)
+      })
+  }
+  const handleGetGot = () => {
+    const action = getGot()
+    store.dispatch(action)
+      .then(() => {
+        setIsGotVisible(true)
+      })
+  }
   const handleOk = () => {
     setIsSymbolVisible(false)
+    setIsTextVisible(false)
+    setIsDataVisible(false)
+    setIsRodataVisible(false)
+    setIsDynamicVisible(false)
+    setIsDynstrVisible(false)
+    setIsDynsymVisible(false)
+    setIsGotVisible(false)
+    setIsPltVisible(false)
   }
   const columns = [
     {
@@ -107,34 +219,71 @@ const Sections = () => {
       key: 'sh_entsize'
     },
   ]
+  const symColumns = [
+    {
+      title: 'No.',
+      dataIndex: 'sym_index',
+      key: 'sym_index'
+    },
+    {
+      title: 'name',
+      dataIndex: 'sym_name',
+      key: 'sym_name',
+    },
+    {
+      title: 'value',
+      dataIndex: 'sym_value',
+      key: 'sym_value',
+    },
+    {
+      title: 'size',
+      dataIndex: 'sym_size',
+      key: 'sym_size',
+    },
+    {
+      title: 'type',
+      dataIndex: 'sym_type',
+      key: 'sym_type',
+    },
+    {
+      title: 'binding',
+      dataIndex: 'sym_bind',
+      key: 'sym_bind',
+    },
+    {
+      title: 'visibility',
+      dataIndex: 'sym_vis',
+      key: 'sym_vis',
+    },
+    {
+      title: 'shndx',
+      dataIndex: 'sym_ndx',
+      key: 'sym_ndx',
+    },
+  ]
   return (
     <>
-      <Modal title="Symbols" visible={isSymbolVisible} onOk={handleOk} onCancel={handleOk}>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-        <p>Some contents...</p>
-      </Modal>
       <Space>
         <Button type="primary" onClick={handleGetSymbols}>Symbols</Button>
         {
           e_type === 'E_TYPE.DYNAMIC'
             ?
             <Space>
-              <Button type="primary">.dynsym</Button>
-              <Button type="primary">.dynstr</Button>
-              <Button type="primary">.dynamic</Button>
+              <Button type="primary" onClick={handleGetDynsym}>.dynsym</Button>
+              <Button type="primary" onClick={handleGetDynstr}>.dynstr</Button>
+              <Button type="primary" onClick={handleGetDynamic}>.dynamic</Button>
             </Space>
             : e_type === 'E_TYPE.EXECUTABLE'
               ?
               <Space>
-                <Button type="primary">.got</Button>
-                <Button type="primary">.plt</Button>
+                <Button type="primary" onClick={handleGetGot}>.got</Button>
+                <Button type="primary" onClick={handleGetPlt}>.plt</Button>
               </Space>
               :
               <Space>
-                <Button type="primary">.text</Button>
-                <Button type="primary">.data</Button>
-                <Button type="primary">.rodata</Button>
+                <Button type="primary" onClick={handleGetText}>.text</Button>
+                <Button type="primary" onClick={handleGetData}>.data</Button>
+                <Button type="primary" onClick={handleGetRodata}>.rodata</Button>
               </Space>
         }
       </Space>
@@ -154,6 +303,119 @@ const Sections = () => {
           ))}
         </Panel>
       </Collapse>
+      <Modal title="Symbols"
+        visible={isSymbolVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <Table
+          columns={symColumns}
+          dataSource={symbols}
+        />
+      </Modal>
+      <Modal title=".text"
+        visible={isTextVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {text.flags}</p>
+        <p>Flags_list: {text.flags_list}</p>
+        <p>Content: {text.content}</p>
+        <p>Content_Hex: {text.content_hex}</p>
+        <p>Content_Str: {text.content_str}</p>
+      </Modal>
+      <Modal title=".data"
+        visible={isDataVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        {
+          e_data
+            ? <div>
+              <p>Flags: {e_data.flags}</p>
+              <p>Flags_list: {e_data.flags_list}</p>
+              <p>Content: {e_data.content}</p>
+              <p>Content_Hex: {e_data.content_hex}</p>
+              <p>Content_Str: {e_data.content_str}</p>
+            </div>
+            : ''
+        }
+      </Modal>
+      <Modal title=".rodata"
+        visible={isRodataVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {rodata.flags}</p>
+        <p>Flags_list: {rodata.flags_list}</p>
+        <p>Content: {rodata.content}</p>
+        <p>Content_Hex: {rodata.content_hex}</p>
+        <p>Content_Str: {rodata.content_str}</p>
+      </Modal>
+      <Modal title=".dynamic"
+        visible={isDynamicVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {dynamic.flags}</p>
+        <p>Flags_list: {dynamic.flags_list}</p>
+        <p>Content: {dynamic.content}</p>
+        <p>Content_Hex: {dynamic.content_hex}</p>
+        <p>Content_Str: {dynamic.content_str}</p>
+      </Modal>
+      <Modal title=".dynstr"
+        visible={isDynstrVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {dynstr.flags}</p>
+        <p>Flags_list: {dynstr.flags_list}</p>
+        <p>Content: {dynstr.content}</p>
+        <p>Content_Hex: {dynstr.content_hex}</p>
+        <p>Content_Str: {dynstr.content_str}</p>
+      </Modal>
+      <Modal title=".dynsym"
+        visible={isDynsymVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {dynsym.flags}</p>
+        <p>Flags_list: {dynsym.flags_list}</p>
+        <p>Content: {dynsym.content}</p>
+        <p>Content_Hex: {dynsym.content_hex}</p>
+        <p>Content_Str: {dynsym.content_str}</p>
+      </Modal>
+      <Modal title=".plt"
+        visible={isPltVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {plt.flags}</p>
+        <p>Flags_list: {plt.flags_list}</p>
+        <p>Content: {plt.content}</p>
+        <p>Content_Hex: {plt.content_hex}</p>
+        <p>Content_Str: {plt.content_str}</p>
+      </Modal>
+      <Modal title=".got"
+        visible={isGotVisible}
+        onOk={handleOk}
+        onCancel={handleOk}
+        width={1400}
+      >
+        <p>Flags: {got.flags}</p>
+        <p>Flags_list: {got.flags_list}</p>
+        <p>Content: {got.content}</p>
+        <p>Content_Hex: {got.content_hex}</p>
+        <p>Content_Str: {got.content_str}</p>
+      </Modal>
     </>
   )
 }

@@ -11,6 +11,16 @@ const defaultState = {
   segments: [],
   sections: [],
   sh_strtab: [],
+  symbols: [],
+  relocations: [],
+  text: {},
+  e_data: {},
+  rodata: {},
+  dynamic: {},
+  dynstr: {},
+  dynsym: {},
+  got: {},
+  plt: {},
 }
 
 export default (state = defaultState, action) => {

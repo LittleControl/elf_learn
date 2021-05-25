@@ -4,6 +4,14 @@ import {
   GET_SECTIONS,
   GET_SYMBOLS,
   GET_RELOCATIONS,
+  GET_DATA,
+  GET_TEXT,
+  GET_RODATA,
+  GET_DYNAMIC,
+  GET_DYNSTR,
+  GET_DYNSYM,
+  GET_GOT,
+  GET_PLT,
 } from './actionTypes'
 import axios from 'axios'
 
@@ -88,6 +96,132 @@ export const getRelocations = () => dispatch => {
         type: GET_RELOCATIONS,
         payload: {
           relocations: res.data.relocations
+        }
+      })
+      return Promise.resolve()
+    })
+}
+
+export const getData = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/data'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_DATA,
+        payload: {
+          e_data: res.data.e_data
+        }
+      })
+      return Promise.resolve()
+    })
+}
+export const getText = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/text'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_TEXT,
+        payload: {
+          text: res.data.text
+        }
+      })
+      return Promise.resolve()
+    })
+}
+
+export const getRodata = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/rodata'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_RODATA,
+        payload: {
+          rodata: res.data.rodata
+        }
+      })
+      return Promise.resolve()
+    })
+}
+
+export const getDynamic = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/dynamic'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_DYNAMIC,
+        payload: {
+          dynamic: res.data.dynamic
+        }
+      })
+      return Promise.resolve()
+    })
+}
+
+export const getDynstr = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/dynstr'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_DYNSTR,
+        payload: {
+          dynstr: res.data.dynstr
+        }
+      })
+      return Promise.resolve()
+    })
+}
+export const getDynsym = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/dynsym'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_DYNSYM,
+        payload: {
+          dymsym: res.data.dynsym
+        }
+      })
+      return Promise.resolve()
+    })
+}
+
+export const getGot = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/got'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_GOT,
+        payload: {
+          got: res.data.got
+        }
+      })
+      return Promise.resolve()
+    })
+}
+
+export const getPlt = () => dispatch => {
+  return axios({
+    url: 'http://127.0.0.1:5000/plt'
+  })
+    .then(res => {
+      console.log(res)
+      dispatch({
+        type: GET_PLT,
+        payload: {
+          plt: res.data.plt
         }
       })
       return Promise.resolve()
