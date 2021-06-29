@@ -1,4 +1,3 @@
-from typing import BinaryIO
 import lief
 from flask import Flask
 from flask import request
